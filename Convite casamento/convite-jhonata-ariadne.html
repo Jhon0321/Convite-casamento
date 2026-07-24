@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ariadne & Jhonata — 18.10.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F7F4EC;
+    --paper:#FFFFFF;
+    --ink:#3A3A32;
+    --olive:#5C6B44;
+    --olive-dark:#485535;
+    --gold:#AD8A4E;
+    --line:#D9D2BE;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--olive-dark);
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;}
+
+  section{max-width:760px; margin:0 auto; padding:70px 24px; text-align:center; position:relative;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding-top:56px;}
+  .monogram-wrap{width:210px;height:260px;margin:0 auto 24px;position:relative;}
+  .monogram-wrap svg{width:100%;height:100%;}
+  .arch{fill:none;stroke:var(--gold);stroke-width:1.3;}
+  .leaf{fill:none;stroke:var(--gold);stroke-width:1.3;stroke-linecap:round;
+    stroke-dasharray:400;stroke-dashoffset:400;animation:draw 2s ease forwards .2s;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .monogram-letters{
+    position:absolute; inset:0; top:18%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond',serif; font-size:56px; color:var(--gold);
+  }
+  h1.names{
+    font-size:clamp(38px,7vw,58px); font-weight:500; letter-spacing:.06em;
+    text-transform:uppercase; margin:6px 0 0; color:var(--olive);
+  }
+  .leaf-icon{width:20px;vertical-align:middle;margin:0 10px 6px;color:var(--olive);}
+  .eyebrow2{
+    margin-top:30px; font-size:13px; letter-spacing:.2em; text-transform:uppercase; line-height:1.9;
+  }
+  .scroll-hint{
+    margin-top:70px; font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:var(--olive);
+  }
+  .scroll-hint .stick{width:1px;height:34px;background:var(--olive);margin:8px auto 0;}
+
+  /* ---------- Divider ornamentado ---------- */
+  .ornament-divider{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto;max-width:600px;}
+  .ornament-divider .rule{flex:1;height:1px;background:var(--olive);opacity:.55;}
+  .ornament-divider svg{width:16px;height:16px;color:var(--olive);flex-shrink:0;}
+
+  h2.section-title{
+    font-size:clamp(24px,4vw,32px); letter-spacing:.14em; text-transform:uppercase;
+    color:var(--olive); margin:0 0 26px; font-weight:500;
+  }
+
+  .verse{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(19px,2.6vw,23px);
+    line-height:1.7;max-width:560px;margin:0 auto;}
+  .lead{font-size:16px;line-height:1.8;max-width:520px;margin:20px auto 0;}
+
+  /* ---------- Foto do local ---------- */
+  .venue-photo{
+    width:100%; max-width:420px; margin:30px auto; border-radius:6px;
+    aspect-ratio:4/5; background:#F6F7F4; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;
+    color:#F6F7F4; font-size:13px; letter-spacing:.05em; overflow:hidden;
+  }
+  .venue-photo img{width:100%;height:100%;object-fit:cover;}
+  .venue-photo svg{width:46px;height:46px;opacity:.5;}
+
+  .icon-circle{
+    width:78px;height:78px;border:1px solid var(--olive);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--olive);
+  }
+  .icon-circle svg{width:34px;height:34px;}
+  .venue-block{margin-top:46px;}
+  .venue-block p{margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ink);}
+
+  /* ---------- Info cards ---------- */
+  .info-cards{display:flex;flex-direction:column;gap:18px;margin-top:26px;}
+  .info-card{
+    border:1px solid var(--line); background:var(--paper); padding:26px 20px; border-radius:4px;
+  }
+  .info-card svg{width:30px;height:30px;color:var(--olive);margin-bottom:10px;}
+  .info-card .label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--olive);margin-bottom:8px;}
+  .info-card .value{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink);}
+  .info-card .value.italic{font-style:italic;}
+
+  /* ---------- Dress code ---------- */
+  .dress-card{border:1px solid var(--line);background:var(--paper);padding:36px 24px;border-radius:4px;margin-top:10px;}
+  .dress-card svg.hanger{width:38px;height:38px;color:var(--olive);margin-bottom:14px;}
+  .dress-card .dc-label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--olive);}
+  .dress-card .dc-value{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;margin:6px 0 22px;color:var(--ink);}
+  .dress-figures{display:flex;justify-content:center;gap:60px;align-items:flex-end;margin:10px 0 20px;}
+  .dress-fig{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--olive);}
+  .dress-fig svg{width:64px;height:110px;color:var(--olive);display:block;margin:0 auto 8px;}
+  .dress-note{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.75;}
+
+  /* ---------- Manual do convidado ---------- */
+  .manual-card{border:1px solid var(--line);background:var(--paper);padding:30px 18px;border-radius:4px;}
+  .manual-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px 14px;}
+  @media(min-width:520px){.manual-grid{grid-template-columns:repeat(4,1fr);}}
+  .manual-item svg{width:30px;height:30px;color:var(--olive);margin-bottom:8px;}
+  .manual-item p{font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;line-height:1.4;color:var(--ink);margin:0;}
+
+  /* ---------- RSVP ---------- */
+  .rsvp-circle{
+    width:210px;height:210px;border:1px solid var(--olive);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;margin:20px auto 10px;position:relative;
+  }
+  .rsvp-circle svg{width:74px;height:74px;color:var(--olive);}
+  .click-hint{
+    font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--olive);font-size:19px;margin-top:4px;
+  }
+  .rsvp-btn{
+    display:inline-block;margin-top:24px;background:var(--olive);color:var(--ivory);
+    text-decoration:none;padding:15px 38px;letter-spacing:.14em;text-transform:uppercase;
+    font-size:12.5px;border-radius:3px;transition:background .2s;
+  }
+  .rsvp-btn:hover{background:var(--gold);}
+  .rsvp-btn.secondary{background:transparent;color:var(--olive);border:1px solid var(--olive);margin-left:10px;}
+  .rsvp-btn.secondary:hover{background:var(--olive);color:var(--ivory);}
+
+  /* ---------- Countdown ---------- */
+  .countdown{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;margin-top:34px;}
+  .cd-item{min-width:64px;}
+  .cd-num{font-family:'Cormorant Garamond',serif;font-size:38px;color:var(--olive);font-weight:600;line-height:1;}
+  .cd-label{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:6px;}
+
+  footer{padding:50px 24px 30px;text-align:center;}
+  footer .signoff{font-family:'Cormorant Garamond',serif;letter-spacing:.14em;text-transform:uppercase;font-size:24px;color:var(--olive);}
+  footer .sub{font-size:13px;letter-spacing:.2em;margin-top:6px;color:var(--olive);}
+  .credit{font-size:11px;color:var(--olive);opacity:.55;margin-top:30px;}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="monogram-wrap">
+    <svg viewBox="0 0 200 240">
+      <path class="arch" d="M40,150 C40,80 60,25 100,25 C140,25 160,80 160,150" />
+      <path class="leaf" d="M40,90 C25,95 15,110 12,130 M12,130 C22,126 30,132 34,140 M34,140 C26,148 24,160 26,172" style="animation-delay:.4s"/>
+      <path class="leaf" d="M160,90 C175,95 185,110 188,130 M188,130 C178,126 170,132 166,140 M166,140 C174,148 176,160 174,172" style="animation-delay:.6s"/>
+    </svg>
+    <div class="monogram-letters"><span>AJ</span></div>
+  </div>
+
+  <h1 class="names">
+    <span>Jhonata</span>
+    <svg class="leaf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2c0 6 4 8 4 8s-4 2-4 8c0-6-4-8-4-8s4-2 4-8z"/></svg>
+    <span>Ariadne</span>
+  </h1>
+
+  <div class="eyebrow2">
+    <div>Convidam você</div>
+    <div>para a celebração do matrimônio</div>
+  </div>
+
+  <div class="scroll-hint">Rolar<div class="stick"></div></div>
+</section>
+
+<!-- ============ O NOSSO CONVITE ============ -->
+<section class="invite">
+  <h2 class="section-title">O nosso convite</h2>
+  <div class="ornament-divider"><div class="rule"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M4 12h6M14 12h6M9 8l3 4-3 4M15 8l-3 4 3 4"/></svg>
+  <div class="rule"></div></div>
+
+  <p class="verse" style="margin-top:30px;">
+    "Grandes coisas fez o Senhor por nós. Por isso estamos alegres." — Salmos 126:3
+  </p>
+
+  <p class="lead">
+    Diante de Deus e com a bênção de suas famílias, Luiza e Júnior convidam você para a celebração do sacramento do matrimônio.
+  </p>
+</section>
+
+<!-- ============ O GRANDE DIA ============ -->
+<section class="grande-dia">
+  <h2 class="section-title">O grande dia</h2>
+
+  <div class="venue-photo">
+    <!-- Troque a div abaixo por <img src="sua-foto.jpg" alt="Igreja"> com a foto real do local -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M4 21h16M6 21V9l6-5 6 5v12M10 21v-6h4v6"/></svg>
+    <span><img src="igreja.png" alt=""></span>
+  </div>
+
+  <div class="venue-block">
+    <div class="icon-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 21h16M7 21V10l5-6 5 6v11M10 21v-5h4v5"/><path d="M12 7v2"/></svg>
+    </div>
+    <p>Paróquia Santo Antônio de Guarus</p>
+    <p>Rua Santo Antônio Nº17</p>
+  </div>
+
+  <div class="venue-block">
+    <div class="icon-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 3l1 7a4 4 0 004 4 4 4 0 004-4l1-7M11 14v7M8 21h6"/><path d="M6 3h4M14 3h4"/></svg>
+    </div>
+    <p>Recepção</p>
+    <p>Salão Holy Garden</p>
+    <p style="font-size:16px;">Rua Cap. Júlio Nogueira Nº83 — Parque Jardim Carioca</p>
+  </div>
+</section>
+
+<!-- ============ INFORMAÇÕES ============ -->
+<section class="info">
+  <h2 class="section-title">Informações</h2>
+  <div class="info-cards">
+    <div class="info-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+      <div class="label">Data</div>
+      <div class="value">28/11/2026</div>
+    </div>
+    <div class="info-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>
+      <div class="label">Local</div>
+      <div class="value italic">Paróquia Santo Antônio de Guarus</div>
+    </div>
+    <div class="info-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <div class="label">Horário</div>
+      <div class="value italic">Cerimônia às 14h</div>
+    </div>
+  </div>
+
+  <div class="countdown" id="countdown">
+    <div class="cd-item"><div class="cd-num" id="cd-dias">00</div><div class="cd-label">dias</div></div>
+    <div class="cd-item"><div class="cd-num" id="cd-horas">00</div><div class="cd-label">horas</div></div>
+    <div class="cd-item"><div class="cd-num" id="cd-min">00</div><div class="cd-label">min</div></div>
+    <div class="cd-item"><div class="cd-num" id="cd-seg">00</div><div class="cd-label">seg</div></div>
+  </div>
+</section>
+
+<!-- ============ DRESS CODE ============ -->
+<section class="dress">
+  <div class="ornament-divider"><div class="rule"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M4 12h6M14 12h6M9 8l3 4-3 4M15 8l-3 4 3 4"/></svg>
+  <div class="rule"></div></div>
+
+  <div class="dress-card" style="margin-top:36px;">
+    <svg class="hanger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3a2 2 0 012 2c0 1-1 1.4-2 2M12 7l-9 6h18l-9-6zM3 19h18"/></svg>
+    <div class="dc-label">Dress code</div>
+    <div class="dc-value">Traje social</div>
+
+    <div class="dress-figures">
+      <div class="dress-fig">
+        <svg viewBox="0 0 60 110" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="30" cy="12" r="7"/><path d="M18 30l12-8 12 8v20h-24z"/><path d="M18 50v40M42 50v40M22 50l8 15 8-15"/></svg>
+        <span>Ele</span>
+      </div>
+      <div class="dress-fig">
+        <svg viewBox="0 0 60 110" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="30" cy="12" r="7"/><path d="M20 28l10-6 10 6-4 14 8 54h-28l8-54z"/></svg>
+        <span>Ela</span>
+      </div>
+    </div>
+    <div class="dress-note">Por favor, evite usar branco</div>
+  </div>
+</section>
+
+<!-- ============ MANUAL DO CONVIDADO ============ -->
+<section class="manual">
+  <h2 class="section-title">Manual do convidado</h2>
+  <div class="manual-card">
+    <div class="manual-grid">
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 14l2 2 4-4"/></svg>
+        <p>Confirme presença</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2M9 15l1.5 1.5L15 12"/></svg>
+        <p>Seja pontual</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 7l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M13 15l3 3 5-5" stroke-width="1"/></svg>
+        <p>Convidado não convida</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="4" y="8" width="12" height="9" rx="1"/><path d="M16 11l5-2v8l-5-2"/><path d="M2 20l20-16" stroke-width="1"/></svg>
+        <p>Não atrapalhe o fotógrafo</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M20 22l-8-8-8 8M12 14V3" /><path d="M3 3l18 18" stroke-width="1"/></svg>
+        <p>Não use branco</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 3l1 7a4 4 0 008 0l1-7M11 14v7M8 21h6"/></svg>
+        <p>Aproveite bastante</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2-5 5-5s5 2 5 5M11 20c0-3 2-5 5-5s5 2 5 5"/></svg>
+        <p>Não saia sem se despedir dos noivos</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 11V7a4 4 0 118 0v4M6 11h12v10H6z"/></svg>
+        <p>Evite confusões</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 5h16v10H8l-4 4z"/><path d="M9 8l3 3-3 3" stroke-width="1"/></svg>
+        <p>Não faça comentários negativos</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3c-3 3-3 6 0 9 3-3 3-6 0-9zM6 21c0-4 3-6 6-6M18 21c0-4-3-6-6-6"/><path d="M3 3l18 18" stroke-width="1"/></svg>
+        <p>Não leve itens de decoração</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 20h16M6 20V11a6 6 0 0112 0v9" /><path d="M9 11h6M3 3l18 18" stroke-width="1"/></svg>
+        <p>Não ataque a mesa de doces</p>
+      </div>
+      <div class="manual-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 7l1.5-2h5L16 7"/></svg>
+        <p>Tire muitas fotos e nos marque no Instagram!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SITE DO CASAMENTO / RSVP ============ -->
+<section class="rsvp">
+  <h2 class="section-title">Site do casamento</h2>
+  <div class="rsvp-circle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 5h2M10 18l2 2 2-2"/></svg>
+  </div>
+  <div class="click-hint">Clique aqui!</div>
+
+  <p class="lead">Confirme sua presença e acesse nossa lista de presentes.</p>
+
+  <div>
+    <a class="rsvp-btn" href="https://wa.me/5500000000000?text=Ol%C3%A1!%20Confirmo%20minha%20presen%C3%A7a%20no%20casamento%20de%20Luiza%20e%20J%C3%BAnior!" target="_blank">Confirmar presença</a>
+    <a class="rsvp-btn secondary" href="#">Lista de presentes</a>
+  </div>
+</section>
+
+<footer>
+  <div class="signoff">Ariadne &amp; Jhonata</div>
+  <div class="sub">18 • Outubro • 2026</div>
+  <div class="credit">Feito com carinho para o grande dia de vocês 💛</div>
+</footer>
+
+<script>
+  // Ajuste a data/hora exata do casamento aqui:
+  const weddingDate = new Date('2026-11-28T14:00:00').getTime();
+
+  function updateCountdown(){
+    const now = new Date().getTime();
+    const diff = weddingDate - now;
+    if(diff <= 0){
+      document.getElementById('countdown').innerHTML = '<div class="cd-num" style="font-size:20px;">Hoje é o grande dia! 🎉</div>';
+      return;
+    }
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const s = Math.floor((diff % (1000*60)) / 1000);
+    document.getElementById('cd-dias').textContent = String(d).padStart(2,'0');
+    document.getElementById('cd-horas').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-seg').textContent = String(s).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
