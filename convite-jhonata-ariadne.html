@@ -357,14 +357,19 @@
   // Ajuste a data/hora exata do casamento aqui:
   const weddingDate = new Date('2026-10-18T14:00:00').getTime();
 
+  // Os confetes começam uma semana antes da data (11/10/2026, à 00h):
+  const confettiStartDate = new Date('2026-10-11T00:00:00').getTime();
+
   let confettiStarted = false;
 
   function updateCountdown(){
     const now = new Date().getTime();
     const diff = weddingDate - now;
+    if(now >= confettiStartDate){
+      startConfetti();
+    }
     if(diff <= 0){
       document.getElementById('countdown').innerHTML = '<div class="cd-num" style="font-size:20px;">Hoje é o grande dia! 🎉</div>';
-      startConfetti();
       return;
     }
     const d = Math.floor(diff / (1000*60*60*24));
