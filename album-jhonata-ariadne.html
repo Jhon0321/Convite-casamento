@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álbum — Ariadne & Jhonata</title>
+<link rel="icon" href="icone.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ivory:#F7F4EC;--paper:#fff;--ink:#3A3A32;--olive:#5C6B44;--olive-dark:#485535;--gold:#AD8A4E;--line:#D9D2BE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ivory);color:var(--olive-dark);font-family:'Jost',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+h1,h2,.serif{font-family:'Cormorant Garamond',serif}
+header{text-align:center;padding:56px 24px 26px}
+.eyebrow{font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold)}
+h1{font-size:clamp(36px,7vw,58px);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin:10px 0 6px;color:var(--olive)}
+.date{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--ink)}
+.divider{display:flex;align-items:center;gap:10px;max-width:480px;margin:26px auto 0}
+.divider i{flex:1;height:1px;background:var(--olive);opacity:.5}
+.divider svg{width:16px;height:16px;color:var(--olive)}
+main{max-width:1100px;margin:0 auto;padding:10px 20px 70px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin:22px 0}
+.btn,.tab{font:400 12.5px 'Jost',sans-serif;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--olive);background:transparent;color:var(--olive);padding:11px 20px;border-radius:3px;cursor:pointer;transition:.2s}
+.btn:hover:not(:disabled),.tab:hover{background:var(--olive);color:var(--ivory)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.solid,.tab.on{background:var(--olive);color:var(--ivory)}
+.tab{padding:10px 0;min-width:40px;text-align:center;letter-spacing:0;font-size:14px}
+.dots{color:var(--olive);padding:0 4px}
+.count{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:var(--ink);margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(5,1fr);gap:16px}}
+.ph{aspect-ratio:3/4;background:var(--paper);border:1px solid var(--line);border-radius:4px;overflow:hidden;cursor:zoom-in;padding:0;position:relative}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .5s,transform .5s}
+.ph img.ok{opacity:1}
+.ph:hover img{transform:scale(1.04)}
+.empty{text-align:center;max-width:520px;margin:50px auto;line-height:1.8;font-size:16px}
+.empty h2{font-size:30px;font-weight:500;color:var(--olive);margin:0 0 10px}
+.empty .box{border:1px solid var(--line);background:var(--paper);padding:34px 22px;border-radius:4px}
+.empty small{display:block;margin-top:18px;font-size:13px;opacity:.75}
+/* lightbox */
+#lb{position:fixed;inset:0;background:rgba(30,32,24,.94);display:none;align-items:center;justify-content:center;z-index:9}
+#lb.open{display:flex}
+#lb img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:3px}
+#lb button{position:absolute;background:none;border:0;color:#F7F4EC;cursor:pointer;font-size:38px;font-family:'Cormorant Garamond',serif;padding:14px 18px;opacity:.8}
+#lb button:hover{opacity:1}
+#lb .x{top:6px;right:8px}#lb .p{left:6px;top:50%;transform:translateY(-50%)}#lb .n{right:6px;top:50%;transform:translateY(-50%)}
+#lb .c{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#F7F4EC;font-size:13px;letter-spacing:.2em;opacity:.8}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Álbum de casamento</div>
+  <h1>Ariadne & Jhonata</h1>
+  <div class="date">18 · 10 · 2026</div>
+  <div class="divider"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z"/></svg><i></i></div>
+</header>
+<main id="app"></main>
+
+<div id="lb"><button class="x" aria-label="Fechar">×</button><button class="p" aria-label="Anterior">‹</button><img alt=""><button class="n" aria-label="Próxima">›</button><div class="c"></div></div>
+<input type="file" id="pick" webkitdirectory multiple hidden>
+
+<script>
+const PASTA = 'fotos de casamento';   // pasta ao lado deste arquivo
+const POR_ABA = 10;
+// Fotos já listadas: cada uma aponta para  fotos de casamento/<nome do arquivo>
+const FOTOS = ["00 ARIADNE e JHONATA CASAMENTO.jpg", "01 ARIADNE e JHONATA CASAMENTO  .JPG", "02 ARIADNE e JHONATA CASAMENTO  .JPG", "03 ARIADNE e JHONATA CASAMENTO  .JPG", "04 ARIADNE e JHONATA CASAMENTO  .JPG", "05 ARIADNE e JHONATA CASAMENTO  .JPG", "06 ARIADNE e JHONATA CASAMENTO  .JPG", "07 ARIADNE e JHONATA CASAMENTO  .JPG", "08 ARIADNE e JHONATA CASAMENTO  .JPG", "09 ARIADNE e JHONATA CASAMENTO  .JPG", "10 ARIADNE e JHONATA CASAMENTO  .JPG", "11 ARIADNE e JHONATA CASAMENTO  .JPG", "12 ARIADNE e JHONATA CASAMENTO  .JPG", "13 ARIADNE e JHONATA CASAMENTO  .JPG", "14 ARIADNE e JHONATA CASAMENTO  .JPG", "15 ARIADNE e JHONATA CASAMENTO  .JPG", "16 ARIADNE e JHONATA CASAMENTO  .JPG", "17 ARIADNE e JHONATA CASAMENTO  .JPG", "18 ARIADNE e JHONATA CASAMENTO  .JPG", "19 ARIADNE e JHONATA CASAMENTO  .JPG", "20 ARIADNE e JHONATA CASAMENTO  .JPG", "21 ARIADNE e JHONATA CASAMENTO  .JPG", "22 ARIADNE e JHONATA CASAMENTO  .JPG", "23 ARIADNE e JHONATA CASAMENTO  .JPG", "24 ARIADNE e JHONATA CASAMENTO  .JPG", "25 ARIADNE e JHONATA CASAMENTO  .JPG", "26 ARIADNE e JHONATA CASAMENTO  .JPG", "27 ARIADNE e JHONATA CASAMENTO  .JPG", "28 ARIADNE e JHONATA CASAMENTO  .JPG", "29 ARIADNE e JHONATA CASAMENTO  .JPG", "30 ARIADNE e JHONATA CASAMENTO  .JPG", "31 ARIADNE e JHONATA CASAMENTO  .JPG", "32 ARIADNE e JHONATA CASAMENTO  .JPG", "33 ARIADNE e JHONATA CASAMENTO  .JPG", "34 ARIADNE e JHONATA CASAMENTO  .JPG", "35 ARIADNE e JHONATA CASAMENTO  .JPG", "36 ARIADNE e JHONATA CASAMENTO  .JPG", "37 ARIADNE e JHONATA CASAMENTO  .JPG", "38 ARIADNE e JHONATA CASAMENTO  .JPG", "39 ARIADNE e JHONATA CASAMENTO  .JPG", "40 ARIADNE e JHONATA CASAMENTO  .JPG", "41 ARIADNE e JHONATA CASAMENTO  .JPG", "42 ARIADNE e JHONATA CASAMENTO  .JPG", "43 ARIADNE e JHONATA CASAMENTO  .JPG", "44 ARIADNE e JHONATA CASAMENTO  .JPG", "45 ARIADNE e JHONATA CASAMENTO  .JPG", "46 ARIADNE e JHONATA CASAMENTO  .JPG", "47 ARIADNE e JHONATA CASAMENTO  .JPG", "48 ARIADNE e JHONATA CASAMENTO  .JPG", "49 ARIADNE e JHONATA CASAMENTO  .JPG", "50 ARIADNE e JHONATA CASAMENTO  .JPG", "51 ARIADNE e JHONATA CASAMENTO  .JPG", "52 ARIADNE e JHONATA CASAMENTO  .JPG", "53 ARIADNE e JHONATA CASAMENTO  .JPG", "54 ARIADNE e JHONATA CASAMENTO  .JPG", "55 ARIADNE e JHONATA CASAMENTO  .JPG", "56 ARIADNE e JHONATA CASAMENTO  .JPG", "57 ARIADNE e JHONATA CASAMENTO  .JPG", "58 ARIADNE e JHONATA CASAMENTO  .JPG", "59 ARIADNE e JHONATA CASAMENTO  .JPG", "60 ARIADNE e JHONATA CASAMENTO  .JPG", "61 ARIADNE e JHONATA CASAMENTO  .JPG", "62 ARIADNE e JHONATA CASAMENTO  .JPG", "63 ARIADNE e JHONATA CASAMENTO  .JPG", "64 ARIADNE e JHONATA CASAMENTO  .JPG", "65 ARIADNE e JHONATA CASAMENTO  .JPG", "66 ARIADNE e JHONATA CASAMENTO  .JPG", "67 ARIADNE e JHONATA CASAMENTO  .JPG", "68 ARIADNE e JHONATA CASAMENTO  .JPG", "69 ARIADNE e JHONATA CASAMENTO  .JPG", "70 ARIADNE e JHONATA CASAMENTO  .JPG", "71 ARIADNE e JHONATA CASAMENTO  .JPG", "72 ARIADNE e JHONATA CASAMENTO  .JPG", "73 ARIADNE e JHONATA CASAMENTO  .JPG", "74 ARIADNE e JHONATA CASAMENTO  .JPG", "75 ARIADNE e JHONATA CASAMENTO  .JPG", "76 ARIADNE e JHONATA CASAMENTO  .JPG", "77 ARIADNE e JHONATA CASAMENTO  .JPG", "78 ARIADNE e JHONATA CASAMENTO  .JPG", "79 ARIADNE e JHONATA CASAMENTO  .JPG", "80 ARIADNE e JHONATA CASAMENTO  .JPG", "81 ARIADNE e JHONATA CASAMENTO  .JPG", "82 ARIADNE e JHONATA CASAMENTO  .JPG", "83 ARIADNE e JHONATA CASAMENTO  .JPG", "84 ARIADNE e JHONATA CASAMENTO  .JPG", "85 ARIADNE e JHONATA CASAMENTO  .JPG", "86 ARIADNE e JHONATA CASAMENTO  .JPG", "87 ARIADNE e JHONATA CASAMENTO  .JPG", "88 ARIADNE e JHONATA CASAMENTO  .JPG", "89 ARIADNE e JHONATA CASAMENTO  .JPG", "90 ARIADNE e JHONATA CASAMENTO  .JPG", "91 ARIADNE e JHONATA CASAMENTO  .JPG", "92 ARIADNE e JHONATA CASAMENTO  .JPG", "93 ARIADNE e JHONATA CASAMENTO  .JPG", "94 ARIADNE e JHONATA CASAMENTO  .JPG", "95 ARIADNE e JHONATA CASAMENTO  .JPG", "96 ARIADNE e JHONATA CASAMENTO  .JPG", "97 ARIADNE e JHONATA CASAMENTO  .JPG", "98 ARIADNE e JHONATA CASAMENTO  .JPG", "99 ARIADNE e JHONATA CASAMENTO  .JPG", "100 ARIADNE e JHONATA CASAMENTO  .JPG", "101 ARIADNE e JHONATA CASAMENTO  .JPG", "102 ARIADNE e JHONATA CASAMENTO  .JPG", "103 ARIADNE e JHONATA CASAMENTO  .JPG", "104 ARIADNE e JHONATA CASAMENTO  .JPG", "105 ARIADNE e JHONATA CASAMENTO  .JPG", "106 ARIADNE e JHONATA CASAMENTO  .JPG", "107 ARIADNE e JHONATA CASAMENTO  .JPG", "108 ARIADNE e JHONATA CASAMENTO  .JPG", "109 ARIADNE e JHONATA CASAMENTO  .JPG", "110 ARIADNE e JHONATA CASAMENTO  .JPG", "111 ARIADNE e JHONATA CASAMENTO  .JPG", "112 ARIADNE e JHONATA CASAMENTO  .JPG", "113 ARIADNE e JHONATA CASAMENTO  .JPG", "114 ARIADNE e JHONATA CASAMENTO  .JPG", "115 ARIADNE e JHONATA CASAMENTO  .JPG", "116 ARIADNE e JHONATA CASAMENTO  .JPG", "117 ARIADNE e JHONATA CASAMENTO  .JPG", "118 ARIADNE e JHONATA CASAMENTO  .JPG", "119 ARIADNE e JHONATA CASAMENTO  .JPG", "120 ARIADNE e JHONATA CASAMENTO  .JPG", "121 ARIADNE e JHONATA CASAMENTO  .JPG", "122 ARIADNE e JHONATA CASAMENTO  .JPG", "123 ARIADNE e JHONATA CASAMENTO  .JPG", "124 ARIADNE e JHONATA CASAMENTO  .JPG", "125 ARIADNE e JHONATA CASAMENTO  .JPG", "126 ARIADNE e JHONATA CASAMENTO  .JPG", "127 ARIADNE e JHONATA CASAMENTO  .JPG", "128 ARIADNE e JHONATA CASAMENTO  .JPG", "129 ARIADNE e JHONATA CASAMENTO  .JPG", "130 ARIADNE e JHONATA CASAMENTO  .JPG", "131 ARIADNE e JHONATA CASAMENTO  .JPG", "132 ARIADNE e JHONATA CASAMENTO  .JPG", "133 ARIADNE e JHONATA CASAMENTO  .JPG", "134 ARIADNE e JHONATA CASAMENTO  .JPG", "135 ARIADNE e JHONATA CASAMENTO  .JPG", "136 ARIADNE e JHONATA CASAMENTO  .JPG", "137 ARIADNE e JHONATA CASAMENTO  .JPG", "138 ARIADNE e JHONATA CASAMENTO  .JPG", "139 ARIADNE e JHONATA CASAMENTO  .JPG", "140 ARIADNE e JHONATA CASAMENTO  .JPG", "141 ARIADNE e JHONATA CASAMENTO  .JPG", "142 ARIADNE e JHONATA CASAMENTO  .JPG", "143 ARIADNE e JHONATA CASAMENTO  .JPG", "144 ARIADNE e JHONATA CASAMENTO  .JPG", "145 ARIADNE e JHONATA CASAMENTO  .JPG", "146 ARIADNE e JHONATA CASAMENTO  .JPG", "147 ARIADNE e JHONATA CASAMENTO  .JPG", "148 ARIADNE e JHONATA CASAMENTO  .JPG", "149 ARIADNE e JHONATA CASAMENTO  .JPG", "150 ARIADNE e JHONATA CASAMENTO  .JPG", "151 ARIADNE e JHONATA CASAMENTO  .JPG", "152 ARIADNE e JHONATA CASAMENTO  .JPG", "153 ARIADNE e JHONATA CASAMENTO  .JPG", "154 ARIADNE e JHONATA CASAMENTO  .JPG", "155 ARIADNE e JHONATA CASAMENTO  .JPG", "156 ARIADNE e JHONATA CASAMENTO  .JPG", "157 ARIADNE e JHONATA CASAMENTO  .JPG", "158 ARIADNE e JHONATA CASAMENTO  .JPG", "159 ARIADNE e JHONATA CASAMENTO  .JPG", "160 ARIADNE e JHONATA CASAMENTO  .JPG", "161 ARIADNE e JHONATA CASAMENTO  .JPG", "162 ARIADNE e JHONATA CASAMENTO  .JPG", "163 ARIADNE e JHONATA CASAMENTO  .JPG", "164 ARIADNE e JHONATA CASAMENTO  .JPG", "165 ARIADNE e JHONATA CASAMENTO  .JPG", "166 ARIADNE e JHONATA CASAMENTO  .JPG", "167 ARIADNE e JHONATA CASAMENTO  .JPG", "168 ARIADNE e JHONATA CASAMENTO  .JPG", "169 ARIADNE e JHONATA CASAMENTO  .JPG", "170 ARIADNE e JHONATA CASAMENTO  .JPG", "171 ARIADNE e JHONATA CASAMENTO  .JPG", "172 ARIADNE e JHONATA CASAMENTO  .JPG", "173 ARIADNE e JHONATA CASAMENTO  .JPG", "174 ARIADNE e JHONATA CASAMENTO  .JPG", "175 ARIADNE e JHONATA CASAMENTO  .JPG", "176 ARIADNE e JHONATA CASAMENTO  .JPG", "177 ARIADNE e JHONATA CASAMENTO  .JPG", "178 ARIADNE e JHONATA CASAMENTO  .JPG", "179 ARIADNE e JHONATA CASAMENTO  .JPG", "180 ARIADNE e JHONATA CASAMENTO  .JPG", "181 ARIADNE e JHONATA CASAMENTO  .JPG", "182 ARIADNE e JHONATA CASAMENTO  .JPG", "183 ARIADNE e JHONATA CASAMENTO  .JPG", "184 ARIADNE e JHONATA CASAMENTO  .JPG", "185 ARIADNE e JHONATA CASAMENTO  .JPG", "186 ARIADNE e JHONATA CASAMENTO  .JPG", "187 ARIADNE e JHONATA CASAMENTO  .JPG", "188 ARIADNE e JHONATA CASAMENTO  .JPG", "189 ARIADNE e JHONATA CASAMENTO  .JPG", "190 ARIADNE e JHONATA CASAMENTO  .JPG", "191 ARIADNE e JHONATA CASAMENTO  .JPG", "192 ARIADNE e JHONATA CASAMENTO  .JPG", "193 ARIADNE e JHONATA CASAMENTO  .JPG", "194 ARIADNE e JHONATA CASAMENTO  .JPG", "195 ARIADNE e JHONATA CASAMENTO  .JPG", "196 ARIADNE e JHONATA CASAMENTO  .JPG", "197 ARIADNE e JHONATA CASAMENTO  .JPG", "198 ARIADNE e JHONATA CASAMENTO  .JPG", "199 ARIADNE e JHONATA CASAMENTO  .JPG", "200 ARIADNE e JHONATA CASAMENTO  .JPG", "201 ARIADNE e JHONATA CASAMENTO  .JPG", "202 ARIADNE e JHONATA CASAMENTO  .JPG", "203 ARIADNE e JHONATA CASAMENTO  .JPG", "204 ARIADNE e JHONATA CASAMENTO  .JPG", "205 ARIADNE e JHONATA CASAMENTO  .JPG", "206 ARIADNE e JHONATA CASAMENTO  .JPG", "207 ARIADNE e JHONATA CASAMENTO  .JPG", "208 ARIADNE e JHONATA CASAMENTO  .JPG", "209 ARIADNE e JHONATA CASAMENTO  .JPG", "210 ARIADNE e JHONATA CASAMENTO  .JPG", "211 ARIADNE e JHONATA CASAMENTO  .JPG", "212 ARIADNE e JHONATA CASAMENTO  .JPG", "213 ARIADNE e JHONATA CASAMENTO  .JPG", "214 ARIADNE e JHONATA CASAMENTO  .JPG", "215 ARIADNE e JHONATA CASAMENTO  .JPG", "216 ARIADNE e JHONATA CASAMENTO  .JPG", "217 ARIADNE e JHONATA CASAMENTO  .JPG", "218 ARIADNE e JHONATA CASAMENTO  .JPG", "219 ARIADNE e JHONATA CASAMENTO  .JPG", "220 ARIADNE e JHONATA CASAMENTO  .JPG", "221 ARIADNE e JHONATA CASAMENTO  .JPG", "222 ARIADNE e JHONATA CASAMENTO  .JPG", "223 ARIADNE e JHONATA CASAMENTO  .JPG", "224 ARIADNE e JHONATA CASAMENTO  .JPG", "225 ARIADNE e JHONATA CASAMENTO  .JPG", "226 ARIADNE e JHONATA CASAMENTO  .JPG", "227 ARIADNE e JHONATA CASAMENTO  .JPG", "228 ARIADNE e JHONATA CASAMENTO  .JPG", "229 ARIADNE e JHONATA CASAMENTO  .JPG", "230 ARIADNE e JHONATA CASAMENTO  .JPG", "231 ARIADNE e JHONATA CASAMENTO  .JPG", "232 ARIADNE e JHONATA CASAMENTO  .JPG", "233 ARIADNE e JHONATA CASAMENTO  .JPG", "234 ARIADNE e JHONATA CASAMENTO  .JPG", "235 ARIADNE e JHONATA CASAMENTO  .JPG", "236 ARIADNE e JHONATA CASAMENTO  .JPG", "237 ARIADNE e JHONATA CASAMENTO  .JPG", "238 ARIADNE e JHONATA CASAMENTO  .JPG", "239 ARIADNE e JHONATA CASAMENTO  .JPG", "240 ARIADNE e JHONATA CASAMENTO  .JPG", "241 ARIADNE e JHONATA CASAMENTO  .JPG", "242 ARIADNE e JHONATA CASAMENTO  .JPG", "243 ARIADNE e JHONATA CASAMENTO  .JPG", "244 ARIADNE e JHONATA CASAMENTO  .JPG", "245 ARIADNE e JHONATA CASAMENTO  .JPG", "246 ARIADNE e JHONATA CASAMENTO  .JPG", "247 ARIADNE e JHONATA CASAMENTO  .JPG", "248 ARIADNE e JHONATA CASAMENTO  .JPG", "249 ARIADNE e JHONATA CASAMENTO  .JPG", "250 ARIADNE e JHONATA CASAMENTO  .JPG", "251 ARIADNE e JHONATA CASAMENTO  .JPG", "252 ARIADNE e JHONATA CASAMENTO  .JPG", "253 ARIADNE e JHONATA CASAMENTO  .JPG", "254 ARIADNE e JHONATA CASAMENTO  .JPG", "255 ARIADNE e JHONATA CASAMENTO  .JPG", "256 ARIADNE e JHONATA CASAMENTO  .JPG", "257 ARIADNE e JHONATA CASAMENTO  .JPG", "258 ARIADNE e JHONATA CASAMENTO  .JPG", "259 ARIADNE e JHONATA CASAMENTO  .JPG", "260 ARIADNE e JHONATA CASAMENTO  .JPG", "261 ARIADNE e JHONATA CASAMENTO  .JPG", "262 ARIADNE e JHONATA CASAMENTO  .JPG", "263 ARIADNE e JHONATA CASAMENTO  .JPG", "264 ARIADNE e JHONATA CASAMENTO  .JPG", "265 ARIADNE e JHONATA CASAMENTO  .JPG", "266 ARIADNE e JHONATA CASAMENTO  .JPG", "267 ARIADNE e JHONATA CASAMENTO  .JPG", "268 ARIADNE e JHONATA CASAMENTO  .JPG", "269 ARIADNE e JHONATA CASAMENTO  .JPG", "270 ARIADNE e JHONATA CASAMENTO  .JPG", "271 ARIADNE e JHONATA CASAMENTO  .JPG", "272 ARIADNE e JHONATA CASAMENTO  .JPG", "273 ARIADNE e JHONATA CASAMENTO  .JPG", "274 ARIADNE e JHONATA CASAMENTO  .JPG", "275 ARIADNE e JHONATA CASAMENTO  .JPG", "276 ARIADNE e JHONATA CASAMENTO  .JPG", "277 ARIADNE e JHONATA CASAMENTO  .JPG", "278 ARIADNE e JHONATA CASAMENTO  .JPG", "279 ARIADNE e JHONATA CASAMENTO  .JPG", "280 ARIADNE e JHONATA CASAMENTO  .JPG", "281 ARIADNE e JHONATA CASAMENTO  .JPG", "282 ARIADNE e JHONATA CASAMENTO  .JPG", "283 ARIADNE e JHONATA CASAMENTO  .JPG", "284 ARIADNE e JHONATA CASAMENTO  .JPG", "285 ARIADNE e JHONATA CASAMENTO  .JPG", "286 ARIADNE e JHONATA CASAMENTO  .JPG", "287 ARIADNE e JHONATA CASAMENTO  .JPG", "288 ARIADNE e JHONATA CASAMENTO  .JPG", "289 ARIADNE e JHONATA CASAMENTO  .JPG", "290 ARIADNE e JHONATA CASAMENTO  .JPG", "291 ARIADNE e JHONATA CASAMENTO  .JPG", "292 ARIADNE e JHONATA CASAMENTO  .JPG", "293 ARIADNE e JHONATA CASAMENTO  .JPG", "294 ARIADNE e JHONATA CASAMENTO  .JPG", "295 ARIADNE e JHONATA CASAMENTO  .JPG", "296 ARIADNE e JHONATA CASAMENTO  .JPG", "297 ARIADNE e JHONATA CASAMENTO  .JPG", "298 ARIADNE e JHONATA CASAMENTO  .JPG", "299 ARIADNE e JHONATA CASAMENTO  .JPG", "300 ARIADNE e JHONATA CASAMENTO  .JPG", "301 ARIADNE e JHONATA CASAMENTO  .JPG", "302 ARIADNE e JHONATA CASAMENTO  .JPG", "303 ARIADNE e JHONATA CASAMENTO  .JPG", "304 ARIADNE e JHONATA CASAMENTO  .JPG", "305 ARIADNE e JHONATA CASAMENTO  .JPG", "306 ARIADNE e JHONATA CASAMENTO  .JPG", "307 ARIADNE e JHONATA CASAMENTO  .JPG", "308 ARIADNE e JHONATA CASAMENTO  .JPG", "309 ARIADNE e JHONATA CASAMENTO  .JPG", "310 ARIADNE e JHONATA CASAMENTO  .JPG", "311 ARIADNE e JHONATA CASAMENTO  .JPG", "312 ARIADNE e JHONATA CASAMENTO  .JPG", "313 ARIADNE e JHONATA CASAMENTO  .JPG", "314 ARIADNE e JHONATA CASAMENTO  .JPG", "315 ARIADNE e JHONATA CASAMENTO  .JPG", "316 ARIADNE e JHONATA CASAMENTO  .JPG", "317 ARIADNE e JHONATA CASAMENTO  .JPG", "318 ARIADNE e JHONATA CASAMENTO  .JPG", "319 ARIADNE e JHONATA CASAMENTO  .JPG", "320 ARIADNE e JHONATA CASAMENTO  .JPG", "321 ARIADNE e JHONATA CASAMENTO  .JPG", "322 ARIADNE e JHONATA CASAMENTO  .JPG", "323 ARIADNE e JHONATA CASAMENTO  .JPG", "324 ARIADNE e JHONATA CASAMENTO  .JPG", "325 ARIADNE e JHONATA CASAMENTO  .JPG", "326 ARIADNE e JHONATA CASAMENTO  .JPG", "327 ARIADNE e JHONATA CASAMENTO  .JPG", "328 ARIADNE e JHONATA CASAMENTO  .JPG", "329 ARIADNE e JHONATA CASAMENTO  .JPG", "330 ARIADNE e JHONATA CASAMENTO  .JPG", "331 ARIADNE e JHONATA CASAMENTO  .JPG", "332 ARIADNE e JHONATA CASAMENTO  .JPG", "333 ARIADNE e JHONATA CASAMENTO  .JPG", "334 ARIADNE e JHONATA CASAMENTO  .JPG", "335 ARIADNE e JHONATA CASAMENTO  .JPG", "336 ARIADNE e JHONATA CASAMENTO  .JPG", "337 ARIADNE e JHONATA CASAMENTO  .JPG", "338 ARIADNE e JHONATA CASAMENTO  .JPG", "339 ARIADNE e JHONATA CASAMENTO  .JPG", "340 ARIADNE e JHONATA CASAMENTO  .JPG", "341 ARIADNE e JHONATA CASAMENTO  .JPG", "342 ARIADNE e JHONATA CASAMENTO  .JPG", "343 ARIADNE e JHONATA CASAMENTO  .JPG", "344 ARIADNE e JHONATA CASAMENTO  .JPG", "345 ARIADNE e JHONATA CASAMENTO  .JPG", "346 ARIADNE e JHONATA CASAMENTO  .JPG", "347 ARIADNE e JHONATA CASAMENTO  .JPG", "348 ARIADNE e JHONATA CASAMENTO  .JPG", "349 ARIADNE e JHONATA CASAMENTO  .JPG", "350 ARIADNE e JHONATA CASAMENTO  .JPG", "351 ARIADNE e JHONATA CASAMENTO  .JPG", "352 ARIADNE e JHONATA CASAMENTO  .JPG", "353 ARIADNE e JHONATA CASAMENTO  .JPG", "354 ARIADNE e JHONATA CASAMENTO  .JPG", "355 ARIADNE e JHONATA CASAMENTO  .JPG", "356 ARIADNE e JHONATA CASAMENTO  .JPG", "357 ARIADNE e JHONATA CASAMENTO  .JPG", "358 ARIADNE e JHONATA CASAMENTO  .JPG", "359 ARIADNE e JHONATA CASAMENTO  .JPG", "360 ARIADNE e JHONATA CASAMENTO  .JPG", "361 ARIADNE e JHONATA CASAMENTO  .JPG", "362 ARIADNE e JHONATA CASAMENTO  .JPG", "363 ARIADNE e JHONATA CASAMENTO  .JPG", "364 ARIADNE e JHONATA CASAMENTO  .JPG", "365 ARIADNE e JHONATA CASAMENTO  .JPG", "366 ARIADNE e JHONATA CASAMENTO  .JPG", "367 ARIADNE e JHONATA CASAMENTO  .JPG", "368 ARIADNE e JHONATA CASAMENTO  .JPG", "369 ARIADNE e JHONATA CASAMENTO  .JPG", "370 ARIADNE e JHONATA CASAMENTO  .JPG", "371 ARIADNE e JHONATA CASAMENTO  .JPG", "372 ARIADNE e JHONATA CASAMENTO  .JPG", "373 ARIADNE e JHONATA CASAMENTO  .JPG", "374 ARIADNE e JHONATA CASAMENTO  .JPG", "375 ARIADNE e JHONATA CASAMENTO  .JPG", "376 ARIADNE e JHONATA CASAMENTO  .JPG", "377 ARIADNE e JHONATA CASAMENTO  .JPG", "378 ARIADNE e JHONATA CASAMENTO  .JPG", "379 ARIADNE e JHONATA CASAMENTO  .JPG", "380 ARIADNE e JHONATA CASAMENTO  .JPG", "381 ARIADNE e JHONATA CASAMENTO  .JPG", "382 ARIADNE e JHONATA CASAMENTO  .JPG", "383 ARIADNE e JHONATA CASAMENTO  .JPG", "384 ARIADNE e JHONATA CASAMENTO  .JPG", "385 ARIADNE e JHONATA CASAMENTO  .JPG", "386 ARIADNE e JHONATA CASAMENTO  .JPG", "387 ARIADNE e JHONATA CASAMENTO  .JPG", "388 ARIADNE e JHONATA CASAMENTO  .JPG", "389 ARIADNE e JHONATA CASAMENTO  .JPG", "390 ARIADNE e JHONATA CASAMENTO  .JPG", "391 ARIADNE e JHONATA CASAMENTO  .JPG", "392 ARIADNE e JHONATA CASAMENTO  .JPG", "393 ARIADNE e JHONATA CASAMENTO  .JPG", "394 ARIADNE e JHONATA CASAMENTO  .JPG", "395 ARIADNE e JHONATA CASAMENTO  .JPG", "396 ARIADNE e JHONATA CASAMENTO  .JPG", "397 ARIADNE e JHONATA CASAMENTO  .JPG", "398 ARIADNE e JHONATA CASAMENTO  .JPG", "399 ARIADNE e JHONATA CASAMENTO  .JPG", "400 ARIADNE e JHONATA CASAMENTO  .JPG", "401 ARIADNE e JHONATA CASAMENTO  .JPG", "402 ARIADNE e JHONATA CASAMENTO  .JPG", "403 ARIADNE e JHONATA CASAMENTO  .JPG", "404 ARIADNE e JHONATA CASAMENTO  .JPG", "405 ARIADNE e JHONATA CASAMENTO  .JPG", "406 ARIADNE e JHONATA CASAMENTO  .JPG", "407 ARIADNE e JHONATA CASAMENTO  .JPG", "408 ARIADNE e JHONATA CASAMENTO  .JPG", "409 ARIADNE e JHONATA CASAMENTO  .JPG", "410 ARIADNE e JHONATA CASAMENTO  .JPG", "411 ARIADNE e JHONATA CASAMENTO  .JPG", "412 ARIADNE e JHONATA CASAMENTO  .JPG", "413 ARIADNE e JHONATA CASAMENTO  .JPG", "414 ARIADNE e JHONATA CASAMENTO  .JPG", "415 ARIADNE e JHONATA CASAMENTO  .JPG", "416 ARIADNE e JHONATA CASAMENTO  .JPG", "417 ARIADNE e JHONATA CASAMENTO  .JPG", "418 ARIADNE e JHONATA CASAMENTO  .JPG", "419 ARIADNE e JHONATA CASAMENTO  .JPG", "420 ARIADNE e JHONATA CASAMENTO  .JPG", "421 ARIADNE e JHONATA CASAMENTO  .JPG", "422 ARIADNE e JHONATA CASAMENTO  .JPG", "423 ARIADNE e JHONATA CASAMENTO  .JPG", "424 ARIADNE e JHONATA CASAMENTO  .JPG", "425 ARIADNE e JHONATA CASAMENTO  .JPG", "426 ARIADNE e JHONATA CASAMENTO  .JPG", "427 ARIADNE e JHONATA CASAMENTO  .JPG", "428 ARIADNE e JHONATA CASAMENTO  .JPG", "429 ARIADNE e JHONATA CASAMENTO  .JPG", "430 ARIADNE e JHONATA CASAMENTO  .JPG", "431 ARIADNE e JHONATA CASAMENTO  .JPG", "432 ARIADNE e JHONATA CASAMENTO  .JPG", "433 ARIADNE e JHONATA CASAMENTO  .JPG", "434 ARIADNE e JHONATA CASAMENTO  .JPG", "435 ARIADNE e JHONATA CASAMENTO  .JPG", "436 ARIADNE e JHONATA CASAMENTO  .JPG", "437 ARIADNE e JHONATA CASAMENTO  .JPG", "438 ARIADNE e JHONATA CASAMENTO  .JPG", "439 ARIADNE e JHONATA CASAMENTO  .JPG", "440 ARIADNE e JHONATA CASAMENTO  .JPG", "441 ARIADNE e JHONATA CASAMENTO  .JPG", "442 ARIADNE e JHONATA CASAMENTO  .JPG", "443 ARIADNE e JHONATA CASAMENTO  .JPG", "444 ARIADNE e JHONATA CASAMENTO  .JPG", "445 ARIADNE e JHONATA CASAMENTO  .JPG", "446 ARIADNE e JHONATA CASAMENTO  .JPG", "447 ARIADNE e JHONATA CASAMENTO  .JPG", "448 ARIADNE e JHONATA CASAMENTO  .JPG", "449 ARIADNE e JHONATA CASAMENTO  .JPG", "450 ARIADNE e JHONATA CASAMENTO  .JPG", "451 ARIADNE e JHONATA CASAMENTO  .JPG", "452 ARIADNE e JHONATA CASAMENTO  .JPG", "453 ARIADNE e JHONATA CASAMENTO  .JPG", "454 ARIADNE e JHONATA CASAMENTO  .JPG", "455 ARIADNE e JHONATA CASAMENTO  .JPG", "456 ARIADNE e JHONATA CASAMENTO  .JPG", "457 ARIADNE e JHONATA CASAMENTO  .JPG", "458 ARIADNE e JHONATA CASAMENTO  .JPG", "459 ARIADNE e JHONATA CASAMENTO  .JPG", "460 ARIADNE e JHONATA CASAMENTO  .JPG", "461 ARIADNE e JHONATA CASAMENTO  .JPG", "462 ARIADNE e JHONATA CASAMENTO  .JPG", "463 ARIADNE e JHONATA CASAMENTO  .JPG", "464 ARIADNE e JHONATA CASAMENTO  .JPG", "465 ARIADNE e JHONATA CASAMENTO  .JPG", "466 ARIADNE e JHONATA CASAMENTO  .JPG", "467 ARIADNE e JHONATA CASAMENTO  .JPG", "468 ARIADNE e JHONATA CASAMENTO  .JPG", "469 ARIADNE e JHONATA CASAMENTO  .JPG", "470 ARIADNE e JHONATA CASAMENTO  .JPG", "471 ARIADNE e JHONATA CASAMENTO  .JPG", "472 ARIADNE e JHONATA CASAMENTO  .JPG", "473 ARIADNE e JHONATA CASAMENTO  .JPG", "474 ARIADNE e JHONATA CASAMENTO  .JPG", "475 ARIADNE e JHONATA CASAMENTO  .JPG", "476 ARIADNE e JHONATA CASAMENTO  .JPG", "477 ARIADNE e JHONATA CASAMENTO  .JPG", "478 ARIADNE e JHONATA CASAMENTO  .JPG", "479 ARIADNE e JHONATA CASAMENTO  .JPG", "480 ARIADNE e JHONATA CASAMENTO  .JPG", "481 ARIADNE e JHONATA CASAMENTO  .JPG", "482 ARIADNE e JHONATA CASAMENTO  .JPG", "483 ARIADNE e JHONATA CASAMENTO  .JPG", "484 ARIADNE e JHONATA CASAMENTO  .JPG", "485 ARIADNE e JHONATA CASAMENTO  .JPG", "486 ARIADNE e JHONATA CASAMENTO  .JPG", "487 ARIADNE e JHONATA CASAMENTO  .JPG", "488 ARIADNE e JHONATA CASAMENTO  .JPG", "489 ARIADNE e JHONATA CASAMENTO  .JPG", "490 ARIADNE e JHONATA CASAMENTO  .JPG", "491 ARIADNE e JHONATA CASAMENTO  .JPG", "492 ARIADNE e JHONATA CASAMENTO  .JPG", "493 ARIADNE e JHONATA CASAMENTO  .JPG", "494 ARIADNE e JHONATA CASAMENTO  .JPG", "495 ARIADNE e JHONATA CASAMENTO  .JPG", "496 ARIADNE e JHONATA CASAMENTO  .JPG", "497 ARIADNE e JHONATA CASAMENTO  .JPG", "498 ARIADNE e JHONATA CASAMENTO  .JPG", "499 ARIADNE e JHONATA CASAMENTO  .JPG", "500 ARIADNE e JHONATA CASAMENTO  .JPG", "501 ARIADNE e JHONATA CASAMENTO  .JPG", "502 ARIADNE e JHONATA CASAMENTO  .JPG", "503 ARIADNE e JHONATA CASAMENTO  .JPG", "504 ARIADNE e JHONATA CASAMENTO  .JPG", "505 ARIADNE e JHONATA CASAMENTO  .JPG", "506 ARIADNE e JHONATA CASAMENTO  .JPG", "507 ARIADNE e JHONATA CASAMENTO  .JPG", "508 ARIADNE e JHONATA CASAMENTO  .JPG", "509 ARIADNE e JHONATA CASAMENTO  .JPG", "510 ARIADNE e JHONATA CASAMENTO  .JPG", "511 ARIADNE e JHONATA CASAMENTO  .JPG", "512 ARIADNE e JHONATA CASAMENTO  .JPG", "513 ARIADNE e JHONATA CASAMENTO  .JPG", "514 ARIADNE e JHONATA CASAMENTO  .JPG", "515 ARIADNE e JHONATA CASAMENTO  .JPG", "516 ARIADNE e JHONATA CASAMENTO  .JPG", "517 ARIADNE e JHONATA CASAMENTO  .JPG", "518 ARIADNE e JHONATA CASAMENTO  .JPG", "519 ARIADNE e JHONATA CASAMENTO  .JPG", "520 ARIADNE e JHONATA CASAMENTO  .JPG", "521 ARIADNE e JHONATA CASAMENTO  .JPG", "522 ARIADNE e JHONATA CASAMENTO  .JPG", "523 ARIADNE e JHONATA CASAMENTO  .JPG", "524 ARIADNE e JHONATA CASAMENTO  .JPG", "525 ARIADNE e JHONATA CASAMENTO  .JPG", "526 ARIADNE e JHONATA CASAMENTO  .JPG", "527 ARIADNE e JHONATA CASAMENTO  .JPG", "528 ARIADNE e JHONATA CASAMENTO  .JPG", "529 ARIADNE e JHONATA CASAMENTO  .JPG", "530 ARIADNE e JHONATA CASAMENTO  .JPG", "531 ARIADNE e JHONATA CASAMENTO  .JPG", "532 ARIADNE e JHONATA CASAMENTO  .JPG", "533 ARIADNE e JHONATA CASAMENTO  .JPG", "534 ARIADNE e JHONATA CASAMENTO  .JPG", "535 ARIADNE e JHONATA CASAMENTO  .JPG", "536 ARIADNE e JHONATA CASAMENTO  .JPG", "537 ARIADNE e JHONATA CASAMENTO  .JPG", "538 ARIADNE e JHONATA CASAMENTO  .JPG", "539 ARIADNE e JHONATA CASAMENTO  .JPG", "540 ARIADNE e JHONATA CASAMENTO  .JPG", "541 ARIADNE e JHONATA CASAMENTO  .JPG", "542 ARIADNE e JHONATA CASAMENTO  .JPG", "543 ARIADNE e JHONATA CASAMENTO  .JPG", "544 ARIADNE e JHONATA CASAMENTO  .JPG", "545 ARIADNE e JHONATA CASAMENTO  .JPG"];
+const EXT = /\.(jpe?g|png|webp|gif|avif|bmp)$/i;
+const app = document.getElementById('app');
+let itens = [];      // {nome, url?} (servidor) ou {nome, file} (pasta escolhida)
+let aba = 0, urls = [];
+const total = () => Math.ceil(itens.length / POR_ABA);
+const collator = new Intl.Collator('pt-BR', {numeric:true});
+
+// Cria a URL só no momento de exibir (nada é carregado antes)
+const fonte = it => { if (it.url) return it.url; const u = URL.createObjectURL(it.file); urls.push(u); return u; };
+const limpar = () => { urls.forEach(URL.revokeObjectURL); urls = []; };
+
+// Detecção automática da pasta (sem escolher nada), em 3 tentativas:
+const montar = (nomes, base) => { nomes = [...new Set(nomes)].filter(n => EXT.test(n)).sort(collator.compare);
+  if(!nomes.length) return false; itens = nomes.map(n => ({nome:n, url: base + encodeURIComponent(n)})); return true; };
+async function viaServidor(){
+  if (location.protocol === 'file:') return false;
+  const base = encodeURI(PASTA) + '/';
+  // 1) lista.json dentro da pasta (gerado por gerar-lista.bat / gerar-lista.py)
+  try{ const r = await fetch(base + 'lista.json', {cache:'no-cache'});
+    if(r.ok && montar(await r.json(), base)) return true; }catch(e){}
+  // 2) listagem de diretório do servidor
+  try{ const r = await fetch(base); if(r.ok){
+    const doc = new DOMParser().parseFromString(await r.text(), 'text/html');
+    const nomes = [...doc.querySelectorAll('a')].map(a => decodeURIComponent((a.getAttribute('href')||'').split('?')[0].split('/').pop()));
+    if(montar(nomes, base)) return true; } }catch(e){}
+  // 3) GitHub Pages: lê a pasta direto do repositório
+  const m = location.hostname.match(/^(.+)\.github\.io$/);
+  if(m){ try{ const repo = location.pathname.split('/')[1] || location.hostname;
+    const r = await fetch(`https://api.github.com/repos/${m[1]}/${repo}/contents/${encodeURIComponent(PASTA)}`);
+    if(r.ok && montar((await r.json()).map(f => f.name), base)) return true; }catch(e){} }
+  return false;
+}
+
+// 2) Fallback: o usuário escolhe a pasta (funciona abrindo o arquivo direto no PC)
+document.getElementById('pick').addEventListener('change', e => {
+  const fs = [...e.target.files].filter(f => EXT.test(f.name)).sort((a,b) => collator.compare(a.name,b.name));
+  if(!fs.length) return;
+  itens = fs.map(f => ({nome:f.name, file:f})); aba = 0; render();
+});
+
+function vazio(){
+  const local = location.protocol === 'file:';
+  app.innerHTML = `<div class="empty"><div class="box"><h2>${local ? 'Abrir fotos' : 'Fotos não encontradas'}</h2>
+  <p>${local ? `Aberto direto do computador: selecione a pasta <b>“${PASTA}”</b> para ver o álbum.`
+   : `Não encontrei fotos na pasta <b>“${PASTA}”</b>. Rode o <b>gerar-lista.bat</b> (ou .py), envie o arquivo <b>lista.json</b> gerado para dentro da pasta e atualize esta página.`}</p>
+  <button class="btn ${local?'solid':''}" id="abrir">Selecionar pasta</button></div></div>`;
+  document.getElementById('abrir').onclick = () => document.getElementById('pick').click();
+}
+
+function paginas(){
+  const n = total(), s = new Set([0, n-1, aba-1, aba, aba+1]);
+  let html = '', ult = -1;
+  [...s].filter(i => i>=0 && i<n).sort((a,b)=>a-b).forEach(i => {
+    if(ult>=0 && i-ult>1) html += '<span class="dots">…</span>';
+    html += `<button class="tab${i===aba?' on':''}" data-i="${i}">${i+1}</button>`; ult = i;
+  });
+  return html;
+}
+
+function render(){
+  if(!itens.length) return vazio();
+  limpar();
+  const ini = aba*POR_ABA, fim = Math.min(ini+POR_ABA, itens.length), n = total();
+  const nav = `<div class="bar"><button class="btn" data-go="-1" ${aba===0?'disabled':''}>‹ Anterior</button>${paginas()}<button class="btn solid" data-go="1" ${aba>=n-1?'disabled':''}>Próximo ›</button></div>`;
+  app.innerHTML = nav + `<p class="count">Fotos ${ini+1}–${fim} de ${itens.length}</p><div class="grid"></div>` + nav;
+  const g = app.querySelector('.grid');
+  itens.slice(ini, fim).forEach((it, k) => {
+    const b = document.createElement('button'); b.className = 'ph'; b.onclick = () => abrir(ini+k);
+    const im = new Image(); im.decoding = 'async'; im.alt = 'Foto ' + (ini+k+1);
+    im.onload = () => im.classList.add('ok'); im.src = fonte(it);
+    b.appendChild(im); g.appendChild(b);
+  });
+  app.querySelectorAll('[data-i]').forEach(b => b.onclick = () => ir(+b.dataset.i));
+  app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => ir(aba + +b.dataset.go));
+}
+function ir(i){ aba = Math.max(0, Math.min(total()-1, i)); render(); scrollTo({top:0, behavior:'smooth'}); }
+
+// Visualização completa
+const lb = document.getElementById('lb'), lbi = lb.querySelector('img'), lbc = lb.querySelector('.c');
+let atual = 0, lbUrl = null;
+function abrir(i){
+  atual = (i + itens.length) % itens.length;
+  if(lbUrl){ URL.revokeObjectURL(lbUrl); lbUrl = null; }
+  const it = itens[atual];
+  if(it.file){ lbUrl = URL.createObjectURL(it.file); lbi.src = lbUrl; } else lbi.src = it.url;
+  lbc.textContent = `${atual+1} / ${itens.length}`; lb.classList.add('open');
+}
+function fechar(){ lb.classList.remove('open'); lbi.removeAttribute('src'); if(lbUrl){ URL.revokeObjectURL(lbUrl); lbUrl=null; }
+  const a = Math.floor(atual/POR_ABA); if(a !== aba){ aba = a; render(); } }
+lb.querySelector('.x').onclick = fechar;
+lb.querySelector('.p').onclick = e => { e.stopPropagation(); abrir(atual-1); };
+lb.querySelector('.n').onclick = e => { e.stopPropagation(); abrir(atual+1); };
+lb.onclick = e => { if(e.target === lb) fechar(); };
+addEventListener('keydown', e => { if(!lb.classList.contains('open')) return;
+  if(e.key==='Escape') fechar(); if(e.key==='ArrowLeft') abrir(atual-1); if(e.key==='ArrowRight') abrir(atual+1); });
+let x0 = null; lb.addEventListener('touchstart', e => x0 = e.touches[0].clientX, {passive:true});
+lb.addEventListener('touchend', e => { if(x0===null) return; const d = e.changedTouches[0].clientX - x0; if(Math.abs(d)>50) abrir(atual + (d<0?1:-1)); x0=null; });
+
+(async () => {
+  if (montar(FOTOS, encodeURI(PASTA) + '/')) return render();   // lista embutida
+  (await viaServidor()) ? render() : vazio();                    // reserva, se a lista estiver vazia
+})();
+</script>
+</body>
+</html>
